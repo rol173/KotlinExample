@@ -95,7 +95,7 @@ class User private constructor(
         println("Checking passwordHash is $passwordHash")
     }
 
-    private fun changePassword(oldPass: String, newPass: String) {
+    fun changePassword(oldPass: String, newPass: String) {
         if (checkPassword(oldPass)) {
             passwordHash = encrypt(newPass)
             if (!accessCode.isNullOrBlank()) accessCode = newPass
@@ -121,7 +121,7 @@ class User private constructor(
     }
 
     fun generateAccessCode(): String {
-        val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
         return StringBuilder().apply{
             repeat(6) {
