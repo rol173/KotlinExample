@@ -22,7 +22,7 @@ class UserHolder {
     fun registerUserByPhone(fullName: String, rawPhone: String): User {
 
         val validPhoneSymbols = "()-0123456789 "
-        var phone = ""
+        var phone: String
         if (rawPhone[0] == '+') {
             phone = rawPhone.substring(1 until rawPhone.length)
             phone.map {
@@ -91,14 +91,14 @@ class UserHolder {
     корректно (достаточно по логину паролю)*/
 
     fun importUsers(list: List<String>): List<User> {
-        var result = mutableListOf<User>()
-        var args = listOf<String>()
+        val result = mutableListOf<User>()
+        var args: List<String>
         for (itemList in list) {
             args = itemList.split(";")
-            var fullName = args[0]
-            var email = if (args[1].isBlank()) null else args[1]
-            var saltAndPassHash = args[2]
-            var phone = if (args[3].isBlank()) null else args[3]
+            val fullName = args[0]
+            val email = if (args[1].isBlank()) null else args[1]
+            val saltAndPassHash = args[2]
+            val phone = if (args[3].isBlank()) null else args[3]
             /*val (fullName, email;, saltAndPassHash, phone) =
                 itemList.split(";")*/
             User.makeUser2(
