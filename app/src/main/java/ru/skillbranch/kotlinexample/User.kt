@@ -70,6 +70,21 @@ class User private constructor(
         sendAccessCodeToUser(rawPhone, code)
     }
 
+    //For import
+    constructor(
+        firstName: String,
+        lastName: String?,
+        email: String?,
+        salt: String,
+        passwordHash: String,
+        rawPhone: String?
+    ) : this(firstName, lastName, email = email, rawPhone = rawPhone, meta = mapOf("src" to "csv")) {
+        println("Import constructor")
+        //val acccode = generateAccessCode()
+        this.salt = salt
+        this.passwordHash = passwordHash
+    }
+
     init {
         println("First init block, primary constructor was called")
 
@@ -100,7 +115,7 @@ class User private constructor(
             passwordHash = encrypt(newPass)
             if (!accessCode.isNullOrBlank()) accessCode = newPass
             println("Password $oldPass has been changed on new password $newPass")
-        } else throw IllegalArgumentException("THe entered password does not match th current password")
+        } else throw IllegalArgumentException("The entered password does not match the current password")
     }
 
     private fun encrypt(password: String): String {
@@ -123,7 +138,7 @@ class User private constructor(
     fun generateAccessCode(): String {
         val possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-        return StringBuilder().apply{
+        return StringBuilder().apply {
             repeat(6) {
                 (possible.indices).random().also { index ->
                     append(possible[index])
@@ -157,16 +172,28 @@ class User private constructor(
             }
         }
 
+        fun makeUser2(
+            fullName: String,
+            email: String? = null,
+            saltAndPassHash: String,
+            phone: String? = null
+        ): User {
+            val (firstName, lastName) = fullName.fullNameToPair()
+            val (salt: String, passHash: String) = saltAndPassHash.split(":")
+            return User(firstName, lastName, email, salt, passHash, phone)
+        }
+
         private fun String.fullNameToPair(): Pair<String, String?> =
             this.split(" ")
-                .filter{it.isNotBlank()}
-                .run{
+                .filter { it.isNotBlank() }
+                .run {
                     when (size) {
                         1 -> first() to null
                         2 -> first() to last()
                         else -> throw IllegalArgumentException(
                             "FullName must contain only first name and last name, current split " +
-                                    "result: ${this@fullNameToPair}")
+                                    "result: ${this@fullNameToPair}"
+                        )
                     }
                 }
     }

@@ -125,6 +125,7 @@ class ExampleUnitTest {
     fun login_user_by_phone_success() {
         val holder = UserHolder()
         val user = holder.registerUserByPhone("John Doe", "+7 (917) 971-11-11")
+        println("user: ${user.userInfo}")
         val expectedInfo = """
             firstName: John
             lastName: Doe
@@ -184,4 +185,5 @@ class ExampleUnitTest {
         Assert.assertNotEquals(oldAccess, user.accessCode!!)
         Assert.assertEquals(expectedInfo, successResult)
     }
+
 }
