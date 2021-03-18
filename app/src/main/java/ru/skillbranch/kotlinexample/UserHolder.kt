@@ -33,7 +33,7 @@ object UserHolder {
 
             for (mapItem in map) {
                 println("mapItem: ${mapItem.value.login} newUser: ${newUser.login}")
-                if (mapItem.value.login == newUser.login) throw IllegalArgumentException("A user with this email already exists")
+                if (mapItem.value.login == newUser.login) throw IllegalArgumentException("A user with this phone already exists")
             }
             map[newUser.login] = newUser
         }
